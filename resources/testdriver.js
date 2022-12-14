@@ -681,7 +681,7 @@
 
         async send_keys(element, keys) {
             if (this.in_automation) {
-                throw new Error('Not implemented');
+                throw new Error('send_keys() is not implemented in automation');
             }
 
             return new Promise(function(resolve, reject) {
