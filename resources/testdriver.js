@@ -659,7 +659,7 @@
 
         async click(element, coords) {
             if (this.in_automation) {
-                throw new Error('click() is not implemented by test_driver_internal');
+                throw new Error("click() can't be called in automation");
             }
 
             return new Promise(function(resolve, reject) {
@@ -681,7 +681,7 @@
 
         async send_keys(element, keys) {
             if (this.in_automation) {
-                throw new Error('send_keys() is not implemented in automation');
+                throw new Error("send_keys() can't be called in automation");
             }
 
             return new Promise(function(resolve, reject) {
