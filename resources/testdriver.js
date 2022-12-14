@@ -659,7 +659,7 @@
 
         async click(element, coords) {
             if (this.in_automation) {
-                throw new Error('click() is unimplemented by test_driver_internal');
+                throw new Error('click() is not implemented by test_driver_internal');
             }
 
             return new Promise(function(resolve, reject) {
@@ -668,15 +668,15 @@
         },
 
         async delete_all_cookies(context=null) {
-            throw new Error("delete_all_cookies() is unimplemented by test_driver_internal");
+            throw new Error("delete_all_cookies() is not implemented by test_driver_internal");
         },
 
         async get_all_cookies(context=null) {
-            throw new Error("get_all_cookies() is unimplemented by test_driver_internal");
+            throw new Error("get_all_cookies() is not implemented by test_driver_internal");
         },
 
         async get_named_cookie(name, context=null) {
-            throw new Error("get_named_cookie() is unimplemented by test_driver_internal");
+            throw new Error("get_named_cookie() is not implemented by test_driver_internal");
         },
 
         async send_keys(element, keys) {
@@ -712,63 +712,63 @@
         },
 
         async freeze(context=null) {
-            throw new Error("freeze() is unimplemented by test_driver_internal");
+            throw new Error("freeze() is not implemented by test_driver_internal");
         },
 
         async minimize_window(context=null) {
-            throw new Error("minimize_window() is unimplemented by test_driver_internal");
+            throw new Error("minimize_window() is not implemented by test_driver_internal");
         },
 
         async set_window_rect(rect, context=null) {
-            throw new Error("set_window_rect() is unimplemented by test_driver_internal");
+            throw new Error("set_window_rect() is not implemented by test_driver_internal");
         },
 
         async action_sequence(actions, context=null) {
-            throw new Error("action_sequence() is unimplemented by test_driver_internal");
+            throw new Error("action_sequence() is not implemented by test_driver_internal");
         },
 
         async generate_test_report(message, context=null) {
-            throw new Error("generate_test_report() is unimplemented by test_driver_internal");
+            throw new Error("generate_test_report() is not implemented by test_driver_internal");
         },
 
         async set_permission(permission_params, context=null) {
-            throw new Error("set_permission() is unimplemented by test_driver_internal");
+            throw new Error("set_permission() is not implemented by test_driver_internal");
         },
 
         async add_virtual_authenticator(config, context=null) {
-            throw new Error("add_virtual_authenticator() is unimplemented by test_driver_internal");
+            throw new Error("add_virtual_authenticator() is not implemented by test_driver_internal");
         },
 
         async remove_virtual_authenticator(authenticator_id, context=null) {
-            throw new Error("remove_virtual_authenticator() unimplemented");
+            throw new Error("remove_virtual_authenticator() not implemented");
         },
 
         async add_credential(authenticator_id, credential, context=null) {
-            throw new Error("add_credential() is unimplemented by test_driver_internal");
+            throw new Error("add_credential() is not implemented by test_driver_internal");
         },
 
         async get_credentials(authenticator_id, context=null) {
-            throw new Error("get_credentials() is unimplemented by test_driver_internal");
+            throw new Error("get_credentials() is not implemented by test_driver_internal");
         },
 
         async remove_credential(authenticator_id, credential_id, context=null) {
-            throw new Error("remove_credential() is unimplemented by test_driver_internal");
+            throw new Error("remove_credential() is not implemented by test_driver_internal");
         },
 
         async remove_all_credentials(authenticator_id, context=null) {
-            throw new Error("remove_all_credentials() is unimplemented by test_driver_internal");
+            throw new Error("remove_all_credentials() is not implemented by test_driver_internal");
         },
 
         async set_user_verified(authenticator_id, uv, context=null) {
-            throw new Error("set_user_verified() is unimplemented by test_driver_internal");
+            throw new Error("set_user_verified() is not implemented by test_driver_internal");
         },
 
         async set_storage_access(origin, embedding_origin, blocked, context=null) {
-            throw new Error("set_storage_access() is unimplemented by test_driver_internal");
+            throw new Error("set_storage_access() is not implemented by test_driver_internal");
         },
 
         async set_spc_transaction_mode(mode, context=null) {
-            throw new Error("set_spc_transaction_mode() is unimplemented by test_driver_internal");
+            throw new Error("set_spc_transaction_mode() is not implemented by test_driver_internal");
         },
 
     };
