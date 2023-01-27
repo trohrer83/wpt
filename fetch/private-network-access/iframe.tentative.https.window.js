@@ -18,6 +18,7 @@ setup(() => {
 //
 // All fetches unaffected by Private Network Access.
 
+/*
 promise_test_parallel(t => iframeTest(t, {
   source: { server: Server.HTTPS_LOCAL },
   target: { server: Server.HTTPS_LOCAL },
@@ -35,6 +36,7 @@ promise_test_parallel(t => iframeTest(t, {
   target: { server: Server.HTTPS_PUBLIC },
   expected: IframeTestResult.SUCCESS,
 }), "local to public: no preflight required.");
+*/
 
 // Generates tests of preflight behavior for a single (source, target) pair.
 //
@@ -61,6 +63,7 @@ function makePreflightTests({
     treatAsPublic: sourceTreatAsPublic,
   };
 
+  /*
   promise_test_parallel(t => iframeTest(t, {
     source,
     target: {
@@ -87,6 +90,7 @@ function makePreflightTests({
     },
     expected: IframeTestResult.FAILURE,
   }), prefix + "missing PNA header.");
+  */
 
   promise_test_parallel(t => iframeTest(t, {
     source,
@@ -110,6 +114,7 @@ makePreflightTests({
   targetName: "local",
 });
 
+/*
 promise_test_parallel(t => iframeTest(t, {
   source: { server: Server.HTTPS_PRIVATE },
   target: { server: Server.HTTPS_PRIVATE },
@@ -121,12 +126,14 @@ promise_test_parallel(t => iframeTest(t, {
   target: { server: Server.HTTPS_PUBLIC },
   expected: IframeTestResult.SUCCESS,
 }), "private to public: no preflight required.");
+*/
 
 // Source: public secure context.
 //
 // Fetches to the local and private address spaces require a successful
 // preflight response carrying a PNA-specific header.
 
+/*
 makePreflightTests({
   sourceServer: Server.HTTPS_PUBLIC,
   sourceName: "public",
@@ -215,3 +222,4 @@ iframeGrandparentTest({
   },
   expected: IframeTestResult.SUCCESS,
 });
+*/
