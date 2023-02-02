@@ -9,19 +9,17 @@
 'use strict';
 
 async function negotiate(pc1, pc2) {
-  const offer = await pc1.createOffer();
-  await pc1.setLocalDescription(offer);
-  await pc2.setRemoteDescription(offer);
-  const answer = await pc2.createAnswer();
-  await pc2.setLocalDescription(answer);
-  await pc1.setRemoteDescription(answer);
+  await pc1.setLocalDescription();
+  await pc2.setRemoteDescription(pc1.localDescription);
+  await pc2.setLocalDescription();
+  await pc1.setRemoteDescription(pc2.localDescription);
 }
 
 test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('video');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   let capability = capabilities.find((capability) => {
       return capability.uri == "urn:ietf:params:rtp-hdrext:sdes:mid" &&
              capability.direction != "stopped";
@@ -38,7 +36,7 @@ test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('audio');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   let capability = capabilities.find((capability) => {
       return capability.uri == "urn:ietf:params:rtp-hdrext:sdes:mid" &&
              capability.direction != "stopped";
@@ -50,7 +48,7 @@ test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('audio');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   capabilities[0].uri = "";
   assert_throws_js(TypeError, () => {
     transceiver.setOfferedRtpHeaderExtensions(capabilities);
@@ -61,7 +59,7 @@ test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('audio');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   capabilities[0].uri = "4711";
   assert_throws_dom("NotSupportedError", () => {
     transceiver.setOfferedRtpHeaderExtensions(capabilities);
@@ -72,7 +70,7 @@ test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('audio');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   let capability = capabilities.find((capability) => {
       return capability.uri == "urn:ietf:params:rtp-hdrext:sdes:mid";
   });
@@ -88,7 +86,7 @@ test(function(t) {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('audio');
-  let capabilities = transceiver.headerExtensionsToOffer;
+  let capabilities = transceiver.headerExtensionsToOffer();
   let selected_capability = capabilities.find((capability) => {
       return capability.direction == "sendrecv" &&
              capability.uri != "urn:ietf:params:rtp-hdrext:sdes:mid";
@@ -106,12 +104,12 @@ promise_test(async t => {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('video');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   const offer = await pc.createOffer();
   const extmaps = offer
                       .sdp
                       .split("\n")
-                      .filter(line => { return line.includes("a=extmap"); })
+                      .filter(line => { return line.includes("a=extmap:"); })
                       .join("\n");
   for (const capability of capabilities) {
     if (capability.direction == "stopped") {
@@ -126,7 +124,7 @@ promise_test(async t => {
   const pc = new RTCPeerConnection();
   t.add_cleanup(() => pc.close());
   const transceiver = pc.addTransceiver('video');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   const selected_capability = capabilities.find((capability) => {
       return capability.direction == "sendrecv" &&
              capability.uri != "urn:ietf:params:rtp-hdrext:sdes:mid" &&
@@ -138,7 +136,7 @@ promise_test(async t => {
   const extmaps = offer
                       .sdp
                       .split("\n")
-                      .filter(line => { return line.includes("a=extmap"); })
+                      .filter(line => { return line.includes("a=extmap:"); })
                       .join("\n");
   for (const capability of capabilities) {
     if (capability.direction == "stopped") {
@@ -157,7 +155,7 @@ promise_test(async t => {
 
   // Disable a non-mandatory extension before first negotiation.
   const transceiver = pc1.addTransceiver('video');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   const selected_capability = capabilities.find((capability) => {
       return capability.direction == "sendrecv" &&
              capability.uri != "urn:ietf:params:rtp-hdrext:sdes:mid" &&
@@ -167,7 +165,7 @@ promise_test(async t => {
   transceiver.setOfferedRtpHeaderExtensions(capabilities);
 
   await negotiate(pc1, pc2);
-  const negotiated_capabilites = transceiver.headerExtensionsNegotiated;
+  const negotiated_capabilites = transceiver.headerExtensionsNegotiated();
 
   // Attempt enabling the extension.
   selected_capability.direction = "sendrecv";
@@ -176,7 +174,7 @@ promise_test(async t => {
   transceiver.setOfferedRtpHeaderExtensions(capabilities);
   await negotiate(pc1, pc2);
   assert_not_equals(
-      transceiver.headerExtensionsNegotiated.find(capability => {
+      transceiver.headerExtensionsNegotiated().find(capability => {
         return capability.uri == selected_capability.uri &&
                capability.direction == "sendrecv";
       }), undefined);
@@ -190,7 +188,7 @@ promise_test(async t => {
 
   // Disable a non-mandatory extension before first negotiation.
   const transceiver = pc1.addTransceiver('video');
-  const capabilities = transceiver.headerExtensionsToOffer;
+  const capabilities = transceiver.headerExtensionsToOffer();
   const selected_capability = capabilities.find((capability) => {
       return capability.direction == "sendrecv" &&
              capability.uri != "urn:ietf:params:rtp-hdrext:sdes:mid" &&
@@ -200,7 +198,7 @@ promise_test(async t => {
   transceiver.setOfferedRtpHeaderExtensions(capabilities);
 
   await negotiate(pc1, pc2);
-  const negotiated_capabilites = transceiver.headerExtensionsNegotiated;
+  const negotiated_capabilites = transceiver.headerExtensionsNegotiated();
 
   for (const capability of negotiated_capabilites) {
     assert_not_equals(capabilities.find((cap) => {
