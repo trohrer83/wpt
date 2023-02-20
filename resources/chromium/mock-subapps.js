@@ -37,7 +37,7 @@ self.SubAppsServiceTest = (() => {
 
     remove() {
       return Promise.resolve({
-        result: testInternal.serviceResultCode,
+        result: [],
       });
     }
   }
