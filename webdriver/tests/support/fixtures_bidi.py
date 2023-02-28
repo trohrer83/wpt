@@ -15,7 +15,9 @@ from webdriver.bidi.modules.script import ContextTarget
 async def add_preload_script(bidi_session):
     preload_scripts_ids = []
 
-    async def add_preload_script(function_declaration, arguments=None, sandbox=None):
+    async def add_preload_script(function_declaration,
+                                 arguments=None,
+                                 sandbox=None):
         script = await bidi_session.script.add_preload_script(
             function_declaration=function_declaration,
             arguments=arguments,
@@ -36,18 +38,18 @@ async def add_preload_script(bidi_session):
 
 @pytest.fixture
 async def subscribe_events(bidi_session):
-    subscriptions = [];
-    async def subscribe_events(events, contexts = None):
-       await bidi_session.session.subscribe(events=events, contexts=contexts)
-       subscriptions.append((events, contexts))
+    subscriptions = []
+
+    async def subscribe_events(events, contexts=None):
+        await bidi_session.session.subscribe(events=events, contexts=contexts)
+        subscriptions.append((events, contexts))
 
     yield subscribe_events
 
     for events, contexts in reversed(subscriptions):
         try:
-            await bidi_session.session.unsubscribe(
-                events=events, contexts=contexts
-        )
+            await bidi_session.session.unsubscribe(events=events,
+                                                   contexts=contexts)
         except (InvalidArgumentException, NoSuchFrameException):
             pass
 
@@ -64,9 +66,11 @@ async def new_tab(bidi_session):
 @pytest.fixture
 def send_blocking_command(bidi_session):
     """Send a blocking command that awaits until the BiDi response has been received."""
-    async def send_blocking_command(command: str, params: Mapping[str, Any]) -> Mapping[str, Any]:
+    async def send_blocking_command(
+            command: str, params: Mapping[str, Any]) -> Mapping[str, Any]:
         future_response = await bidi_session.send_command(command, params)
         return await future_response
+
     return send_blocking_command
 
 
@@ -83,7 +87,9 @@ def wait_for_event(bidi_session, event_loop):
         remove_listener = bidi_session.add_event_listener(event_name, on_event)
 
         return future
+
     return wait_for_event
+
 
 @pytest.fixture
 def current_time(bidi_session, top_context):
@@ -110,10 +116,10 @@ def add_and_remove_iframe(bidi_session, inline):
     browsing context references.
     """
     async def closed_frame(context, url=inline("test-frame")):
-        initial_contexts = await bidi_session.browsing_context.get_tree(root=context["context"])
+        initial_contexts = await bidi_session.browsing_context.get_tree(
+            root=context["context"])
         resp = await bidi_session.script.call_function(
-            function_declaration=
-            """(url) => {
+            function_declaration="""(url) => {
                 const iframe = document.createElement("iframe");
                 // Once we're confident implementations support returning the iframe, just
                 // return that directly. For now generate a unique id to use as a handle.
@@ -127,9 +133,13 @@ def add_and_remove_iframe(bidi_session, inline):
             await_promise=True)
         iframe_dom_id = resp["value"]
 
-        new_contexts = await bidi_session.browsing_context.get_tree(root=context["context"])
-        added_contexts = ({item["context"] for item in new_contexts[0]["children"]} -
-                          {item["context"] for item in initial_contexts[0]["children"]})
+        new_contexts = await bidi_session.browsing_context.get_tree(
+            root=context["context"])
+        added_contexts = (
+            {item["context"]
+             for item in new_contexts[0]["children"]} -
+            {item["context"]
+             for item in initial_contexts[0]["children"]})
         assert len(added_contexts) == 1
         frame_id = added_contexts.pop()
 
@@ -139,4 +149,52 @@ def add_and_remove_iframe(bidi_session, inline):
             await_promise=False)
 
         return frame_id
+
     return closed_frame
+
+
+@pytest.fixture
+def test_origin(url):
+    return url("")
+
+
+@pytest.fixture
+def test_alt_origin(url):
+    return url("", domain="alt")
+
+
+@pytest.fixture
+def test_page(inline):
+    return inline("<div>foo</div>")
+
+
+@pytest.fixture
+def test_page2(inline):
+    return inline("<div>bar</div>")
+
+
+@pytest.fixture
+def test_page_cross_origin(inline):
+    return inline("<div>bar</div>", domain="alt")
+
+
+@pytest.fixture
+def test_page_multiple_frames(inline, test_page, test_page2):
+    return inline(
+        f"<iframe src='{test_page}'></iframe><iframe src='{test_page2}'></iframe>"
+    )
+
+
+@pytest.fixture
+def test_page_nested_frames(inline, test_page_same_origin_frame):
+    return inline(f"<iframe src='{test_page_same_origin_frame}'></iframe>")
+
+
+@pytest.fixture
+def test_page_cross_origin_frame(inline, test_page_cross_origin):
+    return inline(f"<iframe src='{test_page_cross_origin}'></iframe>")
+
+
+@pytest.fixture
+def test_page_same_origin_frame(inline, test_page):
+    return inline(f"<iframe src='{test_page}'></iframe>")
