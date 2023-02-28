@@ -57,6 +57,7 @@ promise_test(async t => {
       stream.getTracks().forEach(t => t.stop());
     }, error => {
       assert_equals(error.name, "OverconstrainedError");
+      assert_true(error instanceof DOMException);
       assert_equals(error.constraint, "groupId");
       const found_device = devices.find(element =>
         element.kind == "videoinput" && element.groupId == device.groupId);
@@ -80,6 +81,7 @@ promise_test(async t => {
       stream.getTracks().forEach(t => t.stop());
     }, error => {
       assert_equals(error.name, "OverconstrainedError");
+      assert_true(error instanceof DOMException);
       assert_equals(error.constraint, "groupId");
       const found_device = devices.find(element =>
         element.kind == "audioinput" && element.groupId == device.groupId);
@@ -118,6 +120,7 @@ promise_test(async t => {
     t.unreached_func('getUserMedia() should fail with invalid resizeMode')();
   } catch (e) {
     assert_equals(e.name, 'OverconstrainedError');
+    assert_true(e instanceof DOMException);
     assert_equals(e.constraint, 'resizeMode');
   }
 }, 'getUserMedia() fails with exact invalid resizeMode.');

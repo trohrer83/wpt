@@ -190,6 +190,7 @@ validFocusBehaviors.forEach(
             stopTracks(await navigator.mediaDevices.getDisplayMedia(options));
           } catch (err) {
             assert_equals(err.name, 'OverconstrainedError', err.message);
+            assert_true(err instanceof DOMException);
             assert_throws_dom(
                 'InvalidStateError',
                 () => controller.setFocusBehavior(focusBehavior));

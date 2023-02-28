@@ -45,6 +45,7 @@ idl_test(
       MediaStreamTrack: ['track'],
       MediaStreamTrackEvent: ['trackEvent'],
       OverconstrainedError: ['new OverconstrainedError("constraint")'],
+      DOMException: ['new OverconstrainedError("constraint")'],
     });
   }
 );

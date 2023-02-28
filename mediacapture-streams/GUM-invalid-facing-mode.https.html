@@ -23,6 +23,7 @@ promise_test(async () => {
     assert_unreached("The empty string is not a valid facingMode");
   } catch (error) {
     assert_equals(error.name, "OverconstrainedError");
+    assert_true(error instanceof DOMException);
     assert_equals(error.constraint, "facingMode");
   };
 }, "Tests that setting an invalid facingMode constraint in getUserMedia fails");

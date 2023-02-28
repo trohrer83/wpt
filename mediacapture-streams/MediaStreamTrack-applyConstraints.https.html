@@ -20,6 +20,7 @@
             t.unreached_func('Accepted invalid groupID'),
             t.step_func(e => {
               assert_equals(e.name, 'OverconstrainedError');
+              assert_true(e instanceof DOMException);
               assert_equals(e.constraint, 'groupId');
             }));
       }));
@@ -35,6 +36,7 @@
             t.unreached_func('Accepted ideal long string groupID'),
             t.step_func(e => {
               assert_equals(e.name, 'OverconstrainedError');
+              assert_true(e instanceof DOMException);
             }));
       }));
   }, 'applyConstraints rejects long string ideal groupID');
@@ -49,6 +51,7 @@
             t.unreached_func('Accepted exact long string  groupID'),
             t.step_func(e => {
               assert_equals(e.name, 'OverconstrainedError');
+              assert_true(e instanceof DOMException);
             }));
       }));
   }, 'applyConstraints rejects long string groupID');
@@ -62,6 +65,7 @@
             t.unreached_func('Accepted exact long string  groupID'),
             t.step_func(e => {
               assert_equals(e.name, 'OverconstrainedError');
+              assert_true(e instanceof DOMException);
             }));
       }));
   }, 'applyConstraints rejects using both mandatory and specific constraints');
@@ -93,6 +97,7 @@
                 t.unreached_func(),
                 t.step_func(e => {
                   assert_equals(e.name, 'OverconstrainedError');
+                  assert_true(e instanceof DOMException);
                   assert_equals(e.constraint, 'groupId');
                 }));
           }
@@ -109,6 +114,7 @@
       t.unreached_func('applyConstraints() must fail with invalid resizeMode')();
     } catch (e) {
       assert_equals(e.name, 'OverconstrainedError');
+      assert_true(e instanceof DOMException);
       assert_equals(e.constraint, 'resizeMode');
     }
   }, 'applyConstraints rejects invalid resizeMode');

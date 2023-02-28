@@ -160,6 +160,7 @@ promise_test(async t => {
     stopTracks(await getDisplayMedia(constraints));
   } catch (err) {
     assert_equals(err.name, 'OverconstrainedError', err.message);
+    assert_true(err instanceof DOMException);
     return;
   }
   assert_unreached('getDisplayMedia should have failed');

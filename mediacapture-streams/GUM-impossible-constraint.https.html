@@ -29,6 +29,7 @@ promise_test(async () => {
 
   } catch (error) {
     assert_equals(error.name, "OverconstrainedError", "An impossible constraint triggers a OverconstrainedError");
+    assert_true(error instanceof DOMException);
     assert_equals(error.constraint, "width", "The name of the not satisfied error is given in error.constraint");
   }
 }, "Tests that setting an impossible constraint in getUserMedia fails");
