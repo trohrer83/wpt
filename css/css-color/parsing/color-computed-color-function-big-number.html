@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>CSS Color Level 4: Computation of colors using color() function syntax with big number</title>
+<link rel="help" href="https://drafts.csswg.org/css-color-4/#color-function">
+<link rel="help" href="https://drafts.csswg.org/css-color-4/#resolving-color-function-values">
+<link rel="help" href="https://drafts.csswg.org/css-color-4/#serializing-color-function-values">
+<link rel="author" title="Daniil Sakhapov" href="mailto:sakhapov@google.com">
+<meta assert="NOTE: We introduced this separate test as there is a problem of every browser serializing CSS values in a different way with none of them according to the spec.">
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script src="/css/support/computed-testcommon.js"></script>
+<div id="target"></div>
+<script>
+test_computed_value("color", "color(display-p3 184 1.00001 2347329746587)", "color(display-p3 184 1.00001 2347329700000)", "[Display P3 color with component > 1 should not clamp]");
+</script>
